@@ -31,23 +31,23 @@ public class OrderService {
         for (Item item : order.getItems()) {
             String discount = "None";
             Product product = item.getProduct();
-            double itemTotalPrice = switch (product.getType()) {
-                case "Bread" -> {
+            ProductType productType = ProductType.fromString(product.getType());
+            double itemTotalPrice = switch (productType) {
+                case BREAD -> {
                     double price = promotionService.calculateBreadPrice(product, item.getQuantity());
                     discount = promotionService.getDiscountAppliedOnBread();
                     yield price;
                 }
-                case "Vegetable" -> {
+                case VEGETABLE -> {
                     double price = promotionService.calculateVegetablePrice(product, item.getQuantity());
                     discount = promotionService.getDiscountAppliedOnVegetable();
                     yield price;
                 }
-                case "Beer" -> {
+                case BEER -> {
                     double price = promotionService.calculateBeerPrice(product, item.getQuantity());
                     discount = promotionService.getDiscountAppliedOnBeer();
                     yield price;
                 }
-                default -> 0;
             };
 
             totalPrice += itemTotalPrice ;

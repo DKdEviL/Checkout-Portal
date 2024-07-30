@@ -9,26 +9,23 @@ import java.time.LocalDate;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String type;
     private double pricePerItem;
-
     private String origin;
-
     private LocalDate manufactureDate;
-
     private Integer weight;
 
-    private String type;
-
-    public Long getId() {
-        return id;
+    public String getType() {
+        return type;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public double getPricePerItem() {
@@ -63,12 +60,12 @@ public class Product {
         this.weight = weight;
     }
 
-    public String getType() {
-        return type;
+    public Long getId() {
+        return id;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

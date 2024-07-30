@@ -14,13 +14,14 @@ public class WebServiceController {
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping(value = { "/orders/{orderId}", "/orders"}, method = RequestMethod.GET)
-    public List<OrderResponseDTO> getOrder(@PathVariable(name = "orderId", required = false) Long orderId) {
-        if(orderId != null) {
-            return List.of(orderService.getOrderDetailsByOrderId(orderId));
-        }else{
-            return orderService.getAllOrders();
-        }
+    @RequestMapping(value = { "/orders"}, method = RequestMethod.GET)
+    public List<OrderResponseDTO> getOrders() {
+        return orderService.getAllOrders();
+    }
+
+    @RequestMapping(value = { "/orders/{orderId}"}, method = RequestMethod.GET)
+    public OrderResponseDTO getOrderById(@PathVariable(name = "orderId") Long orderId) {
+        return orderService.getOrderDetailsByOrderId(orderId);
     }
 
 }

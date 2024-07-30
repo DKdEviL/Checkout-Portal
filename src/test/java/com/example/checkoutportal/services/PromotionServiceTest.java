@@ -30,7 +30,7 @@ public class PromotionServiceTest {
         bread.setManufactureDate(LocalDate.now().minusDays(4));
 
         double price = promotionService.calculateBreadPrice(bread, 5);
-        assertEquals(6.00, price); // Pay for 3 out of 5 items
+        assertEquals(6.00, price);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class PromotionServiceTest {
         bread.setManufactureDate(LocalDate.now().minusDays(6));
 
         double price = promotionService.calculateBreadPrice(bread, 10);
-        assertEquals(8.00, price); // Pay for 4 out of 10 items
+        assertEquals(8.00, price);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class PromotionServiceTest {
         bread.setManufactureDate(LocalDate.now().minusDays(6));
 
         double price = promotionService.calculateBreadPrice(bread, 11);
-        assertEquals(8.00, price); // Pay for 4 out of 11 items
+        assertEquals(8.00, price);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class PromotionServiceTest {
         vegetable.setWeight(200);
 
         double price = promotionService.calculateVegetablePrice(vegetable, 3);
-        assertEquals(13.95, price, String.valueOf(0.01)); // 7% discount
+        assertEquals(13.95, price, String.valueOf(0.01));
     }
 
     @Test
@@ -79,17 +79,27 @@ public class PromotionServiceTest {
         beer.setOrigin("Dutch");
 
         double price = promotionService.calculateBeerPrice(beer, 5);
-        assertEquals(15.0, price); // No discount
+        assertEquals(15.0, price);
     }
 
     @Test
-    public void testCalculateBeerPrice_withDiscount() {
+    public void testCalculateGermanBeerPrice_withDiscount() {
         Product beer = new Product();
         beer.setPricePerItem(3.0);
         beer.setOrigin("German");
 
         double price = promotionService.calculateBeerPrice(beer, 6);
-        assertEquals(14.0, price); // 4 euro discount
+        assertEquals(14.0, price);
+    }
+
+    @Test
+    public void testCalculateBelgiumBeerPrice_withDiscount() {
+        Product beer = new Product();
+        beer.setPricePerItem(3.0);
+        beer.setOrigin("Belgium");
+
+        double price = promotionService.calculateBeerPrice(beer, 6);
+        assertEquals(15.0, price);
     }
 }
 

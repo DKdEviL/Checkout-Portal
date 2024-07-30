@@ -11,17 +11,18 @@ import java.util.*;
 
 @Service
 public class PromotionService {
-    private static final Map<String, Integer> BREAD_DISCOUNTS = Map.of(
-            "noDiscountDays", 2,
-            "buy1Get2Days", 5,
-            "buy1Get3Days", 6,
-            "maxAge", 6
+
+    private static final Map<BreadDiscountType, Integer> BREAD_DISCOUNTS = Map.of(
+            BreadDiscountType.NO_DISCOUNT, 2,
+            BreadDiscountType.BUY_1_GET_2, 5,
+            BreadDiscountType.BUY_1_GET_3, 6,
+            BreadDiscountType.MAX_AGE, 6
     );
 
     private static final List<Map<String, Object>> VEGETABLE_DISCOUNTS = List.of(
-            Map.of("maxWeight", 100, "discount", 5.0),
-            Map.of("maxWeight", 500, "discount", 7.0),
-            Map.of("maxWeight", 1000, "discount", 10.0)
+            Map.of("maxWeight", 100, "minWeight", 0, "discount", 5.0),
+            Map.of("maxWeight", 500,"minWeight", 101, "discount", 7.0),
+            Map.of("maxWeight", Integer.MAX_VALUE,"minWeight", 501, "discount", 10.0)
     );
 
     private static final Map<String, Object> BEER_DISCOUNTS = Map.of(
@@ -43,14 +44,14 @@ public class PromotionService {
         double pricePerItem = product.getPricePerItem();
         BigDecimal totalPrice;
 
-        if (daysOld <= BREAD_DISCOUNTS.get("noDiscountDays")) {
+        if (daysOld <= BREAD_DISCOUNTS.get(BreadDiscountType.NO_DISCOUNT)) {
             totalPrice = BigDecimal.valueOf(pricePerItem * quantity);
             this.discountAppliedOnBread = "None";
-        } else if (daysOld <= BREAD_DISCOUNTS.get("buy1Get2Days")) {
+        } else if (daysOld <= BREAD_DISCOUNTS.get(BreadDiscountType.BUY_1_GET_2)) {
             int chargedQuantity = calculateChargedQuantity(quantity, 2);
             totalPrice = BigDecimal.valueOf(pricePerItem * chargedQuantity);
             this.discountAppliedOnBread = "Buy 1 Get 2";
-        } else if (daysOld == BREAD_DISCOUNTS.get("buy1Get3Days")) {
+        } else if (daysOld == BREAD_DISCOUNTS.get(BreadDiscountType.BUY_1_GET_3)) {
             int chargedQuantity = calculateChargedQuantity(quantity, 3);
             totalPrice = BigDecimal.valueOf(pricePerItem * chargedQuantity);
             this.discountAppliedOnBread = "Buy 1 Get 3";
@@ -72,42 +73,47 @@ public class PromotionService {
 
     public double calculateVegetablePrice(Product product, int quantity) {
         double discount = 0;
+        Integer productWeight = product.getWeight();
         for (Map<String, Object> discountDetail : VEGETABLE_DISCOUNTS) {
             Integer maxWeight = (Integer) discountDetail.get("maxWeight");
+            Integer minWeight = (Integer) discountDetail.get("minWeight");
             double discountValue = (double) discountDetail.get("discount");
-            if (maxWeight == null || product.getWeight() <= maxWeight) {
+            if (productWeight >= minWeight && product.getWeight() <= maxWeight) {
                 discount = discountValue / 100;
+                this.discountAppliedOnVegetable = discountValue + "%";
                 break;
             }
-            this.discountAppliedOnVegetable = discountValue + "%";
         }
         double pricePerItem = product.getPricePerItem();
-        BigDecimal totalPrice = BigDecimal.valueOf(pricePerItem * quantity * (1 - discount));
-
-        return totalPrice.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        double totalPrice = pricePerItem * quantity;
+        double discountValue = totalPrice * discount;
+        return BigDecimal.valueOf(totalPrice - discountValue)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
     public double calculateBeerPrice(Product product, int quantity) {
-        BigDecimal pricePerItem = BigDecimal.valueOf(product.getPricePerItem());
-        BigDecimal totalPrice;
+        double pricePerItem = product.getPricePerItem();
+        double totalPrice;
         double discount = 0;
+        this.discountAppliedOnBeer = "None";
+        int packSize = (int)BEER_DISCOUNTS.get("packSize");
 
-        if (quantity >= (int) BEER_DISCOUNTS.get("packSize")) {
+        if (quantity >= packSize) {
             List<Map<String, Object>> originDiscounts = (List<Map<String, Object>>) BEER_DISCOUNTS.get("originDiscounts");
             for (Map<String, Object> originDiscount : originDiscounts) {
                 if (originDiscount.get("origin").equals(product.getOrigin())) {
                     discount = (double) originDiscount.get("discount");
+                    this.discountAppliedOnBeer = "€ " + discount + " off on each pack(6 beers) for " + product.getOrigin() + " beers";
                     break;
                 }
             }
-            this.discountAppliedOnBeer = discount + " off per pack of 6 for " + product.getOrigin() + " beers";
-            totalPrice = pricePerItem.multiply(BigDecimal.valueOf(quantity))
-                    .subtract(BigDecimal.valueOf(discount));
+            totalPrice = (pricePerItem * quantity) - (discount * (int)(quantity / packSize));
         } else {
-            totalPrice = pricePerItem.multiply(BigDecimal.valueOf(quantity));
+            totalPrice = pricePerItem * quantity;
         }
 
-        return totalPrice.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        return BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 
@@ -123,3 +129,4 @@ public class PromotionService {
         return discountAppliedOnBeer;
     }
 }
+
