@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}" />
+</head>
+<body>
+<a class="back-button" href="#" th:href="@{/orders}">Back to orders</a>
+<div class="receipt-container">
+    <h2>Order Details</h2>
+    <button class="print-button" onclick="printReceipt()">Print</button>
+    <div th:if="${order != null}">
+        <div class="order-info">
+            <p><strong>Order No.:</strong> <span th:text="${order.orderId}"></span></p>
+            <p><strong>Total Price:</strong> <span th:text="${order.totalPrice}"></span></p>
+        </div>
+        <h3>Items:</h3>
+        <table class="receipt-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price per item</th>
+                <th>Discount</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${order.items}">
+                <td th:text="${item.productType} + ' x' + ${item.quantity}">Name</td>
+                <td th:text="${item.pricePerItem}">Price per item</td>
+                <td th:text="${item.discount}">Discount</td>
+                <td th:text="${item.totalPrice}">Total Price</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${order == null}">
+        <p>Order not found.</p>
+    </div>
+</div>
+<script>
+    function printReceipt() {
+        window.print();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Grocery Store Checkout</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}" />
+</head>
+<body>
+<div class="checkout-container">
+    <h2>Welcome to Checkout Panel</h2>
+    <table class="orders-table">
+        <thead>
+        <tr>
+            <th>Order No.</th>
+            <th>Order Total</th>
+            <th>Order Info</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order: ${allOrders}">
+            <td th:text="${order.orderId}">Order No.</td>
+            <td th:text="${order.totalPrice}">Total</td>
+            <td>
+                <a th:if="${order.totalPrice > 0}" th:href="@{/orders/{id}(id=${order.orderId})}" th:text="'See Info'">See Info</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
