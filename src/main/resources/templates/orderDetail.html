@@ -6,8 +6,11 @@
     <link rel="stylesheet" th:href="@{/styles/styles.css}" />
 </head>
 <body>
-<a class="back-button" href="#" th:href="@{/orders}">Back to orders</a>
-<div class="receipt-container">
+<div class="link-container">
+    <a href="#" th:href="@{/orders}">Back to orders</a>
+    <a href="#" th:href="@{/api/orders/{id}(id=${order.orderId})}">See JSON</a>
+</div>
+<div class="container">
     <h2>Order Details</h2>
     <button class="print-button" onclick="printReceipt()">Print</button>
     <div th:if="${order != null}">
@@ -16,7 +19,7 @@
             <p><strong>Total Price:</strong> <span th:text="${order.totalPrice}"></span></p>
         </div>
         <h3>Items:</h3>
-        <table class="receipt-table">
+        <table class="table">
             <thead>
             <tr>
                 <th>Name</th>

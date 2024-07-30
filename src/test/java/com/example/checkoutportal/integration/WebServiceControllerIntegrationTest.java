@@ -76,10 +76,10 @@ public class WebServiceControllerIntegrationTest {
         mockMvc.perform(get("/api/orders/"+createdOrderId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].orderId").value(createdOrderId))
-                .andExpect(jsonPath("$[0].items[0].quantity").value(5))
-                .andExpect(jsonPath("$[0].items[0].totalPrice").value(6.00))
-                .andExpect(jsonPath("$[0].totalPrice").value(6.00));
+                .andExpect(jsonPath("$.orderId").value(createdOrderId))
+                .andExpect(jsonPath("$.items[0].quantity").value(5))
+                .andExpect(jsonPath("$.items[0].totalPrice").value(6.00))
+                .andExpect(jsonPath("$.totalPrice").value(6.00));
     }
 
     @Test

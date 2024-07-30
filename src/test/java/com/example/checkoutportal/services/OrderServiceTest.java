@@ -60,6 +60,6 @@ public class OrderServiceTest {
         assertEquals(1L, orderResponse.getOrderId());
         assertEquals(1, orderResponse.getItems().size());
         assertEquals(6.9, orderResponse.getTotalPrice());
-        assertEquals(6.9, orderResponse.getItems().get(0).getTotalPrice());
+        assertEquals(6.9, orderResponse.getItems().get(0).totalPrice());
     }
 }
