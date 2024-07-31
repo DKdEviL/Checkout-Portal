@@ -1,4 +1,4 @@
-package com.example.checkoutportal.services;
+package com.example.checkoutportal.services.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

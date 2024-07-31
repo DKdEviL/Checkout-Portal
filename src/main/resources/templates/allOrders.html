@@ -11,7 +11,7 @@
 </div>
 <div class="container">
     <h2>Welcome to Checkout Panel</h2>
-    <table class="table">
+    <table th:if="${allOrders.size() != 0}" class="table">
         <thead>
         <tr>
             <th>Order No.</th>
@@ -29,6 +29,10 @@
         </tr>
         </tbody>
     </table>
+    <div th:if="${allOrders.size() == 0}" class="no-orders">
+        <span>NO ORDERS</span>
+        <span>Add some orders in <strong>data.sql</strong> file to see the list here.</span>
+    </div>
 </div>
 </body>
 </html>

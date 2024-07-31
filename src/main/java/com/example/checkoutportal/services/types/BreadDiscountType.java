@@ -1,4 +1,4 @@
-package com.example.checkoutportal.services;
+package com.example.checkoutportal.services.types;
 
 public enum BreadDiscountType {
     NO_DISCOUNT,

@@ -1,6 +1,7 @@
 package com.example.checkoutportal.services;
 
 import com.example.checkoutportal.data.model.Product;
+import com.example.checkoutportal.services.types.BreadDiscountType;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -39,7 +40,11 @@ public class PromotionService {
     private String discountAppliedOnBeer;
 
     public double calculateBreadPrice(Product product, int quantity) {
-        long daysOld = ChronoUnit.DAYS.between(product.getManufactureDate(), LocalDate.now());
+        long daysOld = ChronoUnit.DAYS
+                .between(
+                        product.getManufactureDate(),
+                        LocalDate.now()
+                );
 
         double pricePerItem = product.getPricePerItem();
         BigDecimal totalPrice;
@@ -80,7 +85,7 @@ public class PromotionService {
             double discountValue = (double) discountDetail.get("discount");
             if (productWeight >= minWeight && product.getWeight() <= maxWeight) {
                 discount = discountValue / 100;
-                this.discountAppliedOnVegetable = discountValue + "%";
+                this.discountAppliedOnVegetable = String.format("%.2f%%", discountValue);
                 break;
             }
         }
@@ -100,11 +105,14 @@ public class PromotionService {
         int packSize = (int)BEER_DISCOUNTS.get("packSize");
 
         if (quantity >= packSize) {
-            List<Map<String, Object>> originDiscounts = (List<Map<String, Object>>) BEER_DISCOUNTS.get("originDiscounts");
+            List<Map<String, Object>> originDiscounts =
+                    (List<Map<String, Object>>) BEER_DISCOUNTS.get("originDiscounts");
             for (Map<String, Object> originDiscount : originDiscounts) {
                 if (originDiscount.get("origin").equals(product.getOrigin())) {
                     discount = (double) originDiscount.get("discount");
-                    this.discountAppliedOnBeer = "€ " + discount + " off on each pack(6 beers) for " + product.getOrigin() + " beers";
+                    this.discountAppliedOnBeer = String
+                            .format("€ %.2f off on each pack(6 beers) for %s beers",
+                                    discount, product.getOrigin());
                     break;
                 }
             }
