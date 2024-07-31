@@ -3,7 +3,8 @@
 ## Table of Contents
 1. [How to Run this Project](#how-to-run-this-project)
     1. [Prerequisites](#prerequisites)
-    2. [Steps](#steps)
+    2. [Adding Data](#-setting-up-data)
+    3. [Steps](#steps)
 2. [Description](#description)
 3. [Architecture Diagram](#architecture-diagram)
 4. [Tools and Frameworks](#tools-and-frameworks)
@@ -26,6 +27,24 @@
 
 - Java 17
 - Maven
+
+### Setting up data
+- Refer to the [data.sql](/src/main/resources/data.sql) file
+- Insert a new order in the `ORDERS` table using:
+  ```sql 
+    INSERT INTO ORDERS (total_price) VALUES (0.00);
+  ```
+- Add the products in `PRODUCT` table
+    ```sql
+    INSERT INTO PRODUCT (price_per_item, manufacture_date, type) VALUES (2.00, CURDATE(), 'Bread');
+    ```
+  Note: The above query is for adding only "Bread", refer to the [data.sql](/src/main/resources/data.sql) file to see how to add different types of products.
+- Add the items in the `ITEMS` table to map the products with specific orders
+    ```sql
+    INSERT INTO ITEM (order_id, product_id, quantity)
+        VALUES (1, 1, 5), (1, 7, 2), (1, 10, 15);
+    ```
+  Note: `order_id` & `product_id` are incremental and auto-generated unless you provide a specific one, so these will point to the order in the sequence of your query.
 
 ### Steps
 
@@ -59,22 +78,13 @@ This project is a microservice for a grocery store checkout system. It manages o
 
 ## Tools and Frameworks
 
-### Spring Boot
-- **Advantages**:
-    - Simplifies the setup and development of new Spring applications.
-    - Offers a wide range of tools and frameworks under the Spring ecosystem.
-    - Provides production-ready features such as metrics, health checks, and externalized configuration.
-- **Limitations**:
-    - Can be heavyweight for very simple applications.
-    - Requires a good understanding of the Spring ecosystem to leverage its full potential.
-
 ### H2 Database
 - **Advantages**:
     - Lightweight, fast, and in-memory database, ideal for development and testing.
     - Easy integration with Spring Boot.
 - **Limitations**:
     - Not suitable for production environments due to limited scalability and durability.
-  #### Note: We could use `PostgreSQL` if needed to make the service more robust, scalable and production ready, but for simplicity of development work I chose to use H2 database.
+  #### Note: I could've used `PostgreSQL` if needed to make the service more robust, scalable and production ready, but for simplicity of development work I chose to use H2 database.
 
 ### Thymeleaf
 - **Advantages**:
@@ -93,7 +103,6 @@ This project is a microservice for a grocery store checkout system. It manages o
 
 ## Why These Tools Were Chosen
 
-- **Spring Boot**: To leverage its comprehensive infrastructure for creating microservices, including dependency injection, web framework, data access, and more.
 - **H2 Database**: For quick and easy setup of a development database.
 - **Thymeleaf**: To create dynamic web pages that are integrated seamlessly with Spring Boot.
 - **JUnit and Mockito**: To facilitate robust testing and ensure that the application behaves as expected under various conditions.

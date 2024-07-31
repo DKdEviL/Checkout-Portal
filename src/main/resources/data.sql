@@ -45,25 +45,3 @@ INSERT INTO ITEM (order_id, product_id, quantity)
     VALUES (4, 2, 10), (4, 5, 1);
 INSERT INTO ITEM (order_id, product_id, quantity)
     VALUES (5, 6, 11), (5, 4, 7);
---
--- INSERT INTO PROMOTIONS (type, details)
---     VALUES
---         ('Bread', '{ ' ||
---                   '"noDiscountDays": 1,' ||
---                   '"buy1Get2Days": 3,' ||
---                   '"buy1Get3Days": 6,' ||
---                   '"maxAge": 6' ||
---                   '}'),
---         ('Vegetable', '{' ||
---                       '"weightDiscounts": [' ||
---                       '{"maxWeight": 100, "discount": 0.05},' ||
---                       '{"maxWeight": 500, "discount": 0.07},' ||
---                       '{"maxWeight": null, "discount": 0.10}]' ||
---                       '}'),
---         ('Beer', '{' ||
---                  '"packSize": 6,' ||
---                  '"originDiscounts": [' ||
---                  '{"origin": "Dutch", "discount": 2},' ||
---                  '{"origin": "Belgium", "discount": 3},' ||
---                  '{"origin": "German", "discount": 4}]' ||
---                  '}');

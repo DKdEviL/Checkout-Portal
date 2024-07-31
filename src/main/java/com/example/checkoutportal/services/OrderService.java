@@ -7,8 +7,11 @@ import com.example.checkoutportal.data.model.Item;
 import com.example.checkoutportal.data.model.Order;
 import com.example.checkoutportal.data.model.Product;
 import com.example.checkoutportal.data.repository.OrderRepository;
+import com.example.checkoutportal.services.types.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,7 +27,13 @@ public class OrderService {
     private PromotionService promotionService;
 
     public OrderResponseDTO getOrderDetailsByOrderId(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new HttpClientErrorException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Order with id %s not found", orderId))
+                );
+
         List<OrderItemDetailDTO> itemDetails = new ArrayList<>();
         double totalPrice = 0;
 
@@ -61,7 +70,12 @@ public class OrderService {
                     )
             );
         }
-        totalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+        totalPrice = BigDecimal
+                .valueOf(totalPrice)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
         OrderResponseDTO response = new OrderResponseDTO();
         response.setOrderId(orderId);
         response.setItems(itemDetails);
