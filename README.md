@@ -63,6 +63,10 @@
     ```bash
     mvn spring-boot:run
     ```
+   Note: If above command throw error ` command not found: mvn` then replace `mvn` with `./mvnw` in above commands like:
+    ```bash
+   ./mvnw clean install
+    ```
 
 4. **Access the application**:
     - The web interface for viewing orders will be available at `http://localhost:8080/orders`
