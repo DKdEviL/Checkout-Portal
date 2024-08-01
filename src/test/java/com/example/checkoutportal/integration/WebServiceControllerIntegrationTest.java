@@ -83,6 +83,13 @@ public class WebServiceControllerIntegrationTest {
     }
 
     @Test
+    public void testGetOrderById_NotFound() throws Exception {
+        mockMvc.perform(get("/api/orders/9999")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testGetAllOrders() throws Exception {
         mockMvc.perform(get("/api/orders")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -91,5 +98,17 @@ public class WebServiceControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].items[0].quantity").value(5))
                 .andExpect(jsonPath("$[0].items[0].totalPrice").value(6.00))
                 .andExpect(jsonPath("$[0].totalPrice").value(6.00));
+    }
+
+    @Test
+    public void testGetAllOrder_Empty() throws Exception {
+        itemRepository.deleteAll();
+        orderRepository.deleteAll();
+
+        mockMvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$").isEmpty());
     }
 }

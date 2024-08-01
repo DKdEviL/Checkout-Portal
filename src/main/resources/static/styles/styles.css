@@ -63,7 +63,7 @@ a {
     margin-bottom: 20px;
 }
 
-.order-info p {
+.order-info p, h3 {
     margin: 5px 0;
     font-size: 1.1em;
     color: #555;

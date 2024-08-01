@@ -1,0 +1,26 @@
+# src/main/resources/promotions.yaml
+promotions:
+  bread:
+    no-discount: 1
+    buy-1-get-2: 5
+    buy-1-get-3: 6
+  vegetable:
+    discounts:
+      - max-weight: 100
+        min-weight: 0
+        discount: 5
+      - max-weight: 500
+        min-weight: 101
+        discount: 7
+      - max-weight: 2147483647
+        min-weight: 501
+        discount: 10
+  beer:
+    pack-size: 6
+    origin-discounts:
+      - origin: Dutch
+        discount: 2
+      - origin: Belgium
+        discount: 3
+      - origin: German
+        discount: 4

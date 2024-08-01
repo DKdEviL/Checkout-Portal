@@ -16,7 +16,7 @@
     <div th:if="${order != null}">
         <div class="order-info">
             <p><strong>Order No.:</strong> <span th:text="${order.orderId}"></span></p>
-            <p><strong>Total Price:</strong> <span th:text="${order.totalPrice}"></span></p>
+            <p><strong>Total Price:</strong> <span th:text="'€'+${order.totalPrice}"></span></p>
         </div>
         <h3>Items:</h3>
         <table class="table">
@@ -31,9 +31,9 @@
             <tbody>
             <tr th:each="item : ${order.items}">
                 <td th:text="${item.productType} + ' x' + ${item.quantity}">Name</td>
-                <td th:text="${item.pricePerItem}">Price per item</td>
+                <td th:text="'€' + ${item.pricePerItem}">Price per item</td>
                 <td th:text="${item.discount}">Discount</td>
-                <td th:text="${item.totalPrice}">Total Price</td>
+                <td th:text="'€'+${item.totalPrice}">Total Price</td>
             </tr>
             </tbody>
         </table>
